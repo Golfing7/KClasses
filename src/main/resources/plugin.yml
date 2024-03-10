@@ -1,0 +1,6 @@
+name: KClasses
+description: Class system for players
+author: Golfing8
+version: 1.0
+main: com.golfing8.kclasses.KClasses
+api-version: 1.20
