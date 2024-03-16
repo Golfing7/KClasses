@@ -17,6 +17,19 @@ public class PlayerClassData extends SenderSerializable {
     private Map<String, Integer> classLevels = new HashMap<>();
 
     /**
+     * Clears the class data on the given string key.
+     *
+     * @param str the string key, if null clears ALL data.
+     */
+    public void clearClassData(String str) {
+        if (str == null) {
+            classLevels.clear();
+            return;
+        }
+        classLevels.remove(str);
+    }
+
+    /**
      * Gets the level of the class.
      *
      * @param str the class ID.
@@ -24,7 +37,7 @@ public class PlayerClassData extends SenderSerializable {
      */
     public int getLevel(String str) {
         Preconditions.checkNotNull(str, "ID cannot be null");
-        return classLevels.getOrDefault(str, 0);
+        return classLevels.getOrDefault(str, -1);
     }
 
     /**

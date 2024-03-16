@@ -2,6 +2,7 @@ package com.golfing8.kclasses.module.struct;
 
 import com.golfing8.kcommon.config.adapter.CASerializable;
 import com.golfing8.kcommon.config.lang.Message;
+import com.golfing8.kcommon.struct.item.ItemStackBuilder;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,4 +23,8 @@ public class KClassLevel implements CASerializable {
     private Message reachedMsg;
     /** The lore to add on to the item in the GUI */
     private List<String> addOnLore;
+    /** The icon to show to players when this level is locked. */
+    private ItemStackBuilder lockedIcon;
+    /** The icon to show to players when this level is unlocked. */
+    private ItemStackBuilder unlockedIcon;
 }
