@@ -1,5 +1,6 @@
 package com.golfing8.kclasses.module.struct;
 
+import com.golfing8.kclasses.module.ClassesModule;
 import com.golfing8.kcommon.config.adapter.CASerializable;
 import com.golfing8.kcommon.struct.item.ItemStackBuilder;
 import com.google.common.base.Preconditions;
@@ -27,10 +28,6 @@ public class KClass implements CASerializable {
     private double priceMultiplier;
     /** The price to add to each subsequent level */
     private long priceAddend;
-    /** The format of the locked icon */
-    private ItemStackBuilder lockedIconFormat;
-    /** The format of the unlocked icon */
-    private ItemStackBuilder unlockedIconFormat;
 
     /**
      * Gets the price of the given level.
@@ -43,9 +40,25 @@ public class KClass implements CASerializable {
      * @return the price of the level.
      * @throws IllegalArgumentException if the level is less than 1 or greater than {@link #maxLevel}.
      */
-    public long getLevelPrice(int level) {
+    public int getLevelPrice(int level) {
+        return getLevelPrice(level, 0);
+    }
+
+    /**
+     * Gets the price of the given level.
+     * <p>
+     * Prices are calculated like so:
+     * {@code initialPrice * (priceMultiplier ^ (level)) + (priceAddend * (level))}
+     * </p>
+     *
+     * @param level the level.
+     * @return the price of the level.
+     * @throws IllegalArgumentException if the level is less than 1 or greater than {@link #maxLevel}.
+     */
+    public int getLevelPrice(int level, int prestige) {
         Preconditions.checkArgument(0 <= level && level <= maxLevel, "Level must be in range 0, " + maxLevel + " was " + level);
 
-        return (long) (initialPrice * (Math.pow(priceMultiplier, level)) + priceAddend * (level));
+        ClassesModule module = ClassesModule.get();
+        return (int) ((initialPrice * (Math.pow(priceMultiplier, level)) + priceAddend * (level)) * module.getPrestigeCostMultiplier());
     }
 }

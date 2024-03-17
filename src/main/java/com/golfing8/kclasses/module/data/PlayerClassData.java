@@ -1,5 +1,7 @@
 package com.golfing8.kclasses.module.data;
 
+import com.golfing8.kclasses.module.ClassesModule;
+import com.golfing8.kclasses.module.struct.KClass;
 import com.golfing8.kcommon.data.SenderSerializable;
 import com.google.common.base.Preconditions;
 
@@ -15,6 +17,22 @@ public class PlayerClassData extends SenderSerializable {
      *  The class ID not being present indicates the player has made no progression.
      */
     private Map<String, Integer> classLevels = new HashMap<>();
+
+    /**
+     * Gets the amount of classes this player has prestiged from.
+     *
+     * @return the prestige count.
+     */
+    public int getPrestigeCount() {
+        ClassesModule module = ClassesModule.get();
+        int prestiges = 0;
+        for (Map.Entry<String, Integer> entry : classLevels.entrySet()) {
+            KClass kClass = module.getKClass(entry.getKey());
+            if (classLevels.get(kClass.get_key()) > kClass.getMaxLevel())
+                prestiges++;
+        }
+        return prestiges;
+    }
 
     /**
      * Clears the class data on the given string key.

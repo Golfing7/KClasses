@@ -10,6 +10,7 @@ import com.golfing8.kcommon.menu.PagedMenuContainer;
 import com.golfing8.kcommon.struct.item.ItemStackBuilder;
 import com.golfing8.kcommon.struct.placeholder.Placeholder;
 import com.golfing8.kcommon.util.PlayerUtil;
+import com.golfing8.kcommon.util.SetExpFix;
 import com.golfing8.kcommon.util.StringUtil;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
@@ -27,12 +28,14 @@ public class ClassUpgradeMenu extends PagedMenuContainer {
         this.kClass = kClass;
         this.module = ClassesModule.get();
         this.classData = module.getOrCreate(player.getUniqueId(), PlayerClassData.class);
+        this.setMaxPage(getMaxPage(kClass.getMaxLevel()));
     }
 
     @Override
     protected Menu loadMenu(MenuBuilder menuBuilder) {
+        int playerLevel = classData.getLevel(kClass.get_key());
         menuBuilder.globalPlaceholders(
-                Placeholder.curly("PLAYER_LEVEL", classData.getLevel(kClass.get_key())),
+                Placeholder.curly("PLAYER_LEVEL", playerLevel),
                 Placeholder.curly("CLASS", kClass.getDisplayName())
         );
 
@@ -42,7 +45,27 @@ public class ClassUpgradeMenu extends PagedMenuContainer {
             ItemStackBuilder levelBuilder = generateLevelItem(i);
             menuBuilder.setAt(i - levelBasis, levelBuilder.buildFromTemplate());
             menuBuilder.addAction(i - levelBasis, (event) -> {
-                //TODO Take XP from player
+                Player player = (Player) event.getWhoClicked();
+                // Check if the player is at the correct level
+                if (playerLevel >= level) {
+                    module.getAlreadyAchievedLevelMsg().send(player, "LEVEL", level);
+                    return;
+                }
+
+                if (playerLevel + 1 < level) {
+                    module.getCantUnlockYetMsg().send(player, "LEVEL", level);
+                    return;
+                }
+
+                // Charge the player XP
+                int playerXP = SetExpFix.getTotalExperience(player);
+                int levelPrice = kClass.getLevelPrice(level, classData.getPrestigeCount());
+                if (playerXP < levelPrice) {
+                    module.getCantAffordLevelMsg().send(player, "PLAYER_XP", StringUtil.parseCommas(playerXP));
+                    return;
+                }
+                SetExpFix.setTotalExperience(player, playerXP - levelPrice);
+
                 classData.setLevel(kClass.get_key(), level);
                 if (kClass.getSpecialLevels().containsKey(level)) {
                     kClass.getSpecialLevels().get(level).getReachedMsg().send(getPlayer());
@@ -66,7 +89,7 @@ public class ClassUpgradeMenu extends PagedMenuContainer {
             KClassLevel classLevel = kClass.getSpecialLevels().get(level);
             builder = classData.getLevel(kClass.get_key()) < level ? classLevel.getLockedIcon() : classLevel.getUnlockedIcon();
         } else {
-            builder = classData.getLevel(kClass.get_key()) < level ? kClass.getLockedIconFormat() : kClass.getUnlockedIconFormat();
+            builder = classData.getLevel(kClass.get_key()) < level ? module.getLockedIconFormat() : module.getUnlockedIconFormat();
         }
         builder.addPlaceholders(
                 Placeholder.curly("PRICE", StringUtil.parseCommas(kClass.getLevelPrice(level))),

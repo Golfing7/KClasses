@@ -1,0 +1,46 @@
+locked-item-format:
+  type: RED_BANNER
+unlocked-item-format:
+  type: LIME_BANNER
+
+main-menu:
+  title: '&aClass Selection'
+  size: 27
+  special-slots:
+    # TODO Fill in
+
+upgrade-menu:
+  size: 36
+
+prestige-cost: 150000
+prestige-cost-multiplier: 3
+
+classes:
+  knight:
+    display-name: '&f&lKnight'
+    special-levels: { }
+    max-level: 50
+    initial-price: 1000
+    price-multiplier: 1.1
+    price-addend: 0
+  mage:
+    display-name: '&5&lMage'
+    special-levels: { }
+    max-level: 50
+    initial-price: 1000
+    price-multiplier: 1.1
+    price-addend: 0
+  undead:
+    display-name: '&2&lUndead'
+    special-levels: { }
+    max-level: 50
+    initial-price: 1000
+    price-multiplier: 1.1
+    price-addend: 0
+  guardian:
+    display-name: '&b&lGuardian'
+    special-levels: {}
+    max-level: 50
+    initial-price: 1000
+    price-multiplier: 1.1
+    price-addend: 0

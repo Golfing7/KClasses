@@ -21,8 +21,6 @@ public class KClassLevel implements CASerializable {
     private List<String> rewards; //TODO Replace with proper reward library
     /** The message to be sent when the player reaches this level, can be null */
     private Message reachedMsg;
-    /** The lore to add on to the item in the GUI */
-    private List<String> addOnLore;
     /** The icon to show to players when this level is locked. */
     private ItemStackBuilder lockedIcon;
     /** The icon to show to players when this level is unlocked. */
