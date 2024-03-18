@@ -1,15 +1,49 @@
-locked-item-format:
+locked-icon-format:
   type: RED_BANNER
-unlocked-item-format:
+  name: '&a&lLevel {LEVEL}'
+  lore:
+    - '&7Cost: &e{COST} XP'
+unlocked-icon-format:
   type: LIME_BANNER
+  name: '&c&lLevel {LEVEL}'
+  lore:
+    - '&7You''ve already achieved this level!'
 
 main-menu:
   title: '&aClass Selection'
   size: 27
   special-slots:
-    # TODO Fill in
+    knight:
+      slot: 10
+      type: IRON_SWORD
+      name: '{CLASS_NAME}'
+      lore:
+        - '&7The knight is a strong fighter with high damage!'
+        - '&7Current Level: &e{LEVEL}'
+    guardian:
+      slot: 12
+      type: IRON_CHESTPLATE
+      name: '{CLASS_NAME}'
+      lore:
+        - '&7The guardian protects all that are near him!'
+        - '&7Current Level: &e{LEVEL}'
+    mage:
+      slot: 14
+      type: BLAZE_ROD
+      name: '{CLASS_NAME}'
+      lore:
+        - '&7The mage grants wisdom and knowledge!'
+        - '&7Current Level: &e{LEVEL}'
+    undead:
+      slot: 16
+      type: ROTTEN_FLESH
+      name: '{CLASS_NAME}'
+      lore:
+        - '&7The undead give massive regeneration!'
+        - '&7Current Level: &e{LEVEL}'
 
 upgrade-menu:
+  title: '{CLASS_NAME} &aUpgrade'
   size: 36
 
 prestige-cost: 150000

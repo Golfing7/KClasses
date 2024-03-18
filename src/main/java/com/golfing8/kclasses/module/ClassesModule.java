@@ -11,6 +11,8 @@ import com.golfing8.kcommon.module.ModuleInfo;
 import com.golfing8.kcommon.struct.item.ItemStackBuilder;
 import lombok.Getter;
 
+import java.util.Collection;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -43,6 +45,9 @@ public class ClassesModule extends Module {
     @Conf @Getter
     private double prestigeCostMultiplier;
 
+    @Conf(label = "classes") @Getter
+    private Map<String, KClass> kClasses;
+
     @Override
     public void onEnable() {
         addDataManager("class-data", PlayerClassData.class);
@@ -62,7 +67,7 @@ public class ClassesModule extends Module {
      * @return the class.
      */
     public KClass getKClass(String id) {
-
+        return kClasses.get(id);
     }
 
     /**
@@ -70,7 +75,7 @@ public class ClassesModule extends Module {
      *
      * @return all classes.
      */
-    public Set<KClass> getClasses() {
-
+    public Collection<KClass> getClasses() {
+        return kClasses.values();
     }
 }

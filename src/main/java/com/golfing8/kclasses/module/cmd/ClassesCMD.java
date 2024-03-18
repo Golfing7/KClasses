@@ -2,6 +2,7 @@ package com.golfing8.kclasses.module.cmd;
 
 import com.golfing8.kclasses.module.ClassesModule;
 import com.golfing8.kclasses.module.menu.ClassSelectMenu;
+import com.golfing8.kcommon.command.Cmd;
 import com.golfing8.kcommon.command.CommandContext;
 import com.golfing8.kcommon.command.MCommand;
 import com.golfing8.kcommon.command.requirement.RequirementPlayer;
@@ -9,6 +10,10 @@ import com.golfing8.kcommon.command.requirement.RequirementPlayer;
 /**
  * Opens the class selection menu.
  */
+@Cmd(
+        name = "classes",
+        description = "Opens the classes menu"
+)
 public class ClassesCMD extends MCommand<ClassesModule> {
 
     @Override

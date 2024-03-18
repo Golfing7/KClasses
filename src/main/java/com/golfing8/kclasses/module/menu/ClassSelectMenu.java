@@ -12,6 +12,7 @@ import com.golfing8.kcommon.struct.placeholder.Placeholder;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
+import java.util.Arrays;
 import java.util.Collections;
 
 /**
@@ -36,7 +37,10 @@ public class ClassSelectMenu extends PlayerMenuContainer {
                 new ClassUpgradeMenu(module.getMainConfig().getConfigurationSection("upgrade-menu"), getPlayer(), kClass).open();
             });
             builder.specialPlaceholders(kClass.get_key(),
-                    Collections.singleton(Placeholder.curly("LEVEL", classData.getLevel(kClass.get_key()))));
+                    Arrays.asList(
+                            Placeholder.curly("LEVEL", classData.getLevel(kClass.get_key()) + 1),
+                            Placeholder.curly("CLASS_NAME", kClass.getDisplayName())
+                    ));
         }
         return builder.buildSimple();
     }

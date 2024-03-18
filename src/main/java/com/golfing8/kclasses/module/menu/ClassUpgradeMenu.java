@@ -9,7 +9,6 @@ import com.golfing8.kcommon.menu.MenuBuilder;
 import com.golfing8.kcommon.menu.PagedMenuContainer;
 import com.golfing8.kcommon.struct.item.ItemStackBuilder;
 import com.golfing8.kcommon.struct.placeholder.Placeholder;
-import com.golfing8.kcommon.util.PlayerUtil;
 import com.golfing8.kcommon.util.SetExpFix;
 import com.golfing8.kcommon.util.StringUtil;
 import org.bukkit.configuration.ConfigurationSection;
@@ -35,8 +34,9 @@ public class ClassUpgradeMenu extends PagedMenuContainer {
     protected Menu loadMenu(MenuBuilder menuBuilder) {
         int playerLevel = classData.getLevel(kClass.get_key());
         menuBuilder.globalPlaceholders(
-                Placeholder.curly("PLAYER_LEVEL", playerLevel),
-                Placeholder.curly("CLASS", kClass.getDisplayName())
+                Placeholder.curly("PLAYER_LEVEL", playerLevel + 1),
+                Placeholder.curly("CLASS", kClass.getDisplayName()),
+                Placeholder.curly("CLASS_NAME", kClass.getDisplayName())
         );
 
         int levelBasis = getPage() * (getLastSize() - 9);
@@ -48,12 +48,12 @@ public class ClassUpgradeMenu extends PagedMenuContainer {
                 Player player = (Player) event.getWhoClicked();
                 // Check if the player is at the correct level
                 if (playerLevel >= level) {
-                    module.getAlreadyAchievedLevelMsg().send(player, "LEVEL", level);
+                    module.getAlreadyAchievedLevelMsg().send(player, "LEVEL", level + 1);
                     return;
                 }
 
                 if (playerLevel + 1 < level) {
-                    module.getCantUnlockYetMsg().send(player, "LEVEL", level);
+                    module.getCantUnlockYetMsg().send(player, "LEVEL", level + 1);
                     return;
                 }
 
@@ -70,8 +70,11 @@ public class ClassUpgradeMenu extends PagedMenuContainer {
                 if (kClass.getSpecialLevels().containsKey(level)) {
                     kClass.getSpecialLevels().get(level).getReachedMsg().send(getPlayer());
                 } else {
-                    module.getReachedLevelMsg().send(getPlayer(), "LEVEL", level);
+                    module.getReachedLevelMsg().send(getPlayer(), "LEVEL", level + 1);
                 }
+                ClassUpgradeMenu classUpgradeMenu = new ClassUpgradeMenu(getParentSection(), getPlayer(), kClass);
+                classUpgradeMenu.setPage(getPage());
+                classUpgradeMenu.open();
             });
         }
         return menuBuilder.buildSimple();
@@ -91,9 +94,10 @@ public class ClassUpgradeMenu extends PagedMenuContainer {
         } else {
             builder = classData.getLevel(kClass.get_key()) < level ? module.getLockedIconFormat() : module.getUnlockedIconFormat();
         }
+        builder = new ItemStackBuilder(builder);
         builder.addPlaceholders(
-                Placeholder.curly("PRICE", StringUtil.parseCommas(kClass.getLevelPrice(level))),
-                Placeholder.curly("LEVEL", level)
+                Placeholder.curly("COST", StringUtil.parseCommas(kClass.getLevelPrice(level, classData.getPrestigeCount()))),
+                Placeholder.curly("LEVEL", level + 1)
         );
         return builder;
     }

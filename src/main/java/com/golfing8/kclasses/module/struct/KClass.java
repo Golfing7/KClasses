@@ -59,6 +59,10 @@ public class KClass implements CASerializable {
         Preconditions.checkArgument(0 <= level && level <= maxLevel, "Level must be in range 0, " + maxLevel + " was " + level);
 
         ClassesModule module = ClassesModule.get();
-        return (int) ((initialPrice * (Math.pow(priceMultiplier, level)) + priceAddend * (level)) * module.getPrestigeCostMultiplier());
+        if (prestige > 0) {
+            return (int) ((initialPrice * (Math.pow(priceMultiplier, level)) + priceAddend * (level)) * (module.getPrestigeCostMultiplier() * prestige));
+        } else {
+            return (int) ((initialPrice * (Math.pow(priceMultiplier, level)) + priceAddend * (level)));
+        }
     }
 }
